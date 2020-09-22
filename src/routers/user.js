@@ -76,7 +76,11 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 
 // read profile
 router.get('/users/me', auth, async (req, res) => {
-    res.send(req.user);
+    try {
+        res.send(req.user);
+    } catch (e) {
+        res.send(500).send();
+    }
 });
 
 // router.get('/users/:id', async (req, res) => {
@@ -168,9 +172,13 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
 
 //7. delete avatar
 router.delete('/users/me/avatar', auth, async (req, res) => {
-    req.user.avatar = undefined;
-    req.user.save();
-    res.send();
+    try {
+        req.user.avatar = undefined;
+        req.user.save();
+        res.send();
+    } catch (e) {
+        res.status(500).send();
+    }
 });
 
 // 8. getting avatar image
